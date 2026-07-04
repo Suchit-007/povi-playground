@@ -1,5 +1,7 @@
 # 🧬 Welcome to the PoVI Sandbox! ✨
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-34d399.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
 Hello there, builder! We are so glad you found your way to the **Proof of Verifiable Inference (PoVI) Playground**. 
 
 This repository is a warm, interactive space designed for developers, researchers, and creators interested in bridging the gap between **Client-Side Machine Learning** and **Decentralized Ledgers**. 
