@@ -28,32 +28,23 @@ To help you navigate the codebase, here is a quick tour of where everything live
 
 ## ⚡ The Sandbox Workflow
 
-Here is how the data flows from your browser to the blockchain. We use a combination of off-chain compute and on-chain validation:
+Here is how the data flows from your browser to the blockchain. We split the labor between off-chain calculation and on-chain verification:
 
 ```mermaid
-sequenceDiagram
-    autonumber
-    actor User as "Client Browser Node"
-    participant ML as "Local ML Engine (DistilBERT)"
-    participant Crypto as "SHA-256 Proof Generator"
-    participant Contract as "ModelRegistry Smart Contract"
-    participant Ledger as "InferenceToken ($INF)"
+graph TD
+    classDef default fill:#151b23,stroke:#30363d,stroke-width:1px,color:#c9d1d9;
+    classDef highlight fill:#1f2937,stroke:#00f5ff,stroke-width:1.5px,color:#f0f6fc;
+    classDef success fill:#143224,stroke:#34d399,stroke-width:1.5px,color:#f0f6fc;
+    classDef failure fill:#3c181e,stroke:#f87171,stroke-width:1.5px,color:#f0f6fc;
 
-    User->>ML: Input text parameters
-    ML->>User: Sentiment Class + Confidence Score
-    User->>Crypto: Compute Hash(Model + Input + Output + Owner)
-    Crypto->>User: Cryptographic Proof Signature
-    User->>Contract: logInference(modelName, input, output, proofHash)
-    Note over Contract: Status: Under Audit
-    actor Validator as "Audit Validator"
-    Validator->>Contract: verifyInference(inferenceId, isCorrect)
-    alt Approved (Proof Valid)
-        Contract->>Ledger: mintReward(submitter, 10 * 10^18 $INF)
-        Ledger->>User: Balance updated on-chain
-    else Rejected (Proof Forged)
-        Contract->>User: Mark Closed (No Rewards)
-    end
+    A["1. Input text parameters"] --> B["2. Run Local ML Inference<br>(DistilBERT / Heuristics)"]:::highlight
+    B --> C["3. Generate Cryptographic Proof<br>(SHA-256 Signature of Output)"]
+    C --> D["4. Log to Smart Contract<br>(ModelRegistry Ledger)"]:::highlight
+    D --> E{"5. Validator Audit"}
+    E -- Approved --> F["6. Mint $INF Reward Tokens"]:::success
+    E -- Rejected --> G["6. Close Log (No Rewards)"]:::failure
 ```
+
 
 ---
 
