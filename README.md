@@ -1,36 +1,25 @@
-# 🧬 Welcome to the PoVI Sandbox! ✨
+# 🔬 Proof of Verifiable Inference (PoVI)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-34d399.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-Hello there, builder! We are so glad you found your way to the **Proof of Verifiable Inference (PoVI) Playground**. 
-
-This repository is a warm, interactive space designed for developers, researchers, and creators interested in bridging the gap between **Client-Side Machine Learning** and **Decentralized Ledgers**. 
-
-Instead of heavy corporate marketing slides, we built a fully functional, running sandbox to address a core challenge: *How do we trustlessly verify that a client-side AI model actually generated a specific prediction without running slow, expensive neural networks inside a gas-constrained EVM?*
-
-We hope you have fun exploring it! 🚀
+A trustless protocol for verifying client-side machine learning inference on decentralized ledgers without executing neural networks inside gas-constrained EVM environments.
 
 ---
 
-## 🗺️ Finding Your Way Around (Repo Map)
+## Overview
 
-To help you navigate the codebase, here is a quick tour of where everything lives:
+PoVI addresses a fundamental challenge in decentralized AI: **How can we cryptographically verify that a client-side model produced a specific prediction without running expensive neural network computations on-chain?**
 
-*   📂 **`src/app/`** — *The Workstation:* This is the heart of the Next.js frontend application.
-    *   [page.tsx](file:///c:/Users/Projects/ops-2/src/app/page.tsx) — The dashboard controls, active telemetry screens, leaderboard, and validation consoles.
-    *   [globals.css](file:///c:/Users/Projects/ops-2/src/app/globals.css) — Custom ambient glows, grid backgrounds, and glassmorphic aesthetics.
-    *   [web3.ts](file:///c:/Users/Projects/ops-2/src/app/web3.ts) — The Ethers.js integration code connecting the frontend to your local blockchain network.
-*   📂 **`contracts/`** — *The Trust Engine:* The Solidity smart contracts.
-    *   [ModelRegistry.sol](file:///c:/Users/Projects/ops-2/contracts/ModelRegistry.sol) — Handles logging of inference proofs and validator approvals.
-    *   [InferenceToken.sol](file:///c:/Users/Projects/ops-2/contracts/InferenceToken.sol) — An ERC-20 token (`$INF`) minted to reward verified nodes.
-*   📂 **`scripts/`** — *The Glue:*
-    *   [deploy.js](file:///c:/Users/Projects/ops-2/scripts/deploy.js) — The deployment script that compiles the contracts and connects them to the frontend.
+This repository provides a complete sandbox environment demonstrating a practical solution — combining off-chain inference computation with on-chain verification and incentive mechanisms.
 
 ---
 
-## ⚡ The Sandbox Workflow
+## Architecture
 
-Here is how the data flows from your browser to the blockchain. We split the labor between off-chain calculation and on-chain verification:
+The protocol distributes computational responsibilities across two domains:
+
+- **Off-Chain**: Model inference and cryptographic proof generation execute client-side using DistilBERT or heuristic-based classifiers
+- **On-Chain**: A lightweight registry contract stores inference proofs, manages validator consensus, and distributes ERC-20 token rewards
 
 ```mermaid
 graph TD
@@ -47,51 +36,70 @@ graph TD
     E -- Rejected --> G["6. Close Log (No Rewards)"]:::failure
 ```
 
+---
+
+## Repository Structure
+
+```
+.
+├── src/app/                    # Next.js frontend application
+│   ├── page.tsx                # Dashboard, telemetry, leaderboard, and validation interfaces
+│   ├── globals.css             # Custom styling with ambient effects and glassmorphic components
+│   └── web3.ts                 # Ethers.js integration for blockchain connectivity
+├── contracts/                  # Solidity smart contracts
+│   ├── ModelRegistry.sol       # Inference proof logging and validator approval management
+│   └── InferenceToken.sol      # ERC-20 token ($INF) for validator rewards
+└── scripts/
+    └── deploy.js               # Contract compilation and deployment automation
+```
 
 ---
 
-## 🛠️ Let's Get Started! (Step-by-Step Setup)
-
-Follow these friendly steps to set up your local development environment.
+## Quick Start
 
 ### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
+- [Node.js](https://nodejs.org/) (v18 or later recommended)
 
-### 1. Install Dependencies
-Get all the required packages installed locally:
+### Installation & Setup
+
+**1. Install dependencies**
 ```bash
 npm install
 ```
 
-### 2. Spin Up a Local Blockchain Node
-Start a local Hardhat simulation network. This node runs locally on `http://127.0.0.1:8545`:
+**2. Launch local blockchain node**
 ```bash
 npx hardhat node
 ```
+Runs on `http://127.0.0.1:8545` with pre-funded accounts.
 
-### 3. Compile and Deploy the Smart Contracts
-In a new terminal tab, run the deploy script to publish the Solidity contracts:
+**3. Deploy smart contracts**
 ```bash
 npx hardhat run scripts/deploy.js --network localhost
 ```
-*Note: This automatically writes contract metadata and addresses to `src/app/contracts.json` so the frontend knows how to talk to them.*
+Contract addresses and ABIs are automatically written to `src/app/contracts.json`.
 
-### 4. Launch the Telemetry Workstation
-Run the Next.js development server:
+**4. Start the development server**
 ```bash
 npm run dev
 ```
-Open **[http://localhost:3000](http://localhost:3000)** in your browser and check out the interactive dashboard!
+Open [http://localhost:3000](http://localhost:3000) to access the dashboard.
 
 ---
 
-## 🤝 Collaborative Dual Licensing
+## License
 
-To support both open innovation and fair contribution, this project is licensed under a dual model:
+This project is distributed under a dual-license model:
 
-### 1. The Permissive MIT License
-You are free to copy, modify, distribute, and build upon this code for any personal or commercial use.
+### MIT License
+You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software for any purpose, subject to the conditions of the MIT License.
 
-### 2. The Dev-to-Dev Fair-Use Covenant
-*   **Keep it Honest:** If you use this repository to launch a commercial machine learning audit network, you promise to keep validation metrics transparent and accessible to the public.
-*   **Share the Love:** If you find ways to improve the verification speed or proof generation safety, submit a Pull Request! We'd love to learn from your work and improve together.
+### Contributor Covenant
+- **Transparency**: Commercial deployments built on this protocol must maintain publicly accessible validation metrics.
+- **Reciprocity**: Improvements to verification efficiency or proof generation security should be contributed back via Pull Request when feasible.
+
+---
+
+## Contributing
+
+Contributions are welcome. Please open an issue to discuss proposed changes before submitting a pull request.
